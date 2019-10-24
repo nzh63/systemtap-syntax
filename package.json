@@ -36,7 +36,6 @@
                 "language": "systemtap",
                 "scopeName": "source.systemtap",
                 "path": "./syntaxes/systemtap.tmLanguage.json",
-                "injectTo": ["source.c"],
                 "embeddedLanguages": {
                     "meta.embedded.block.c": "c"
                 }
