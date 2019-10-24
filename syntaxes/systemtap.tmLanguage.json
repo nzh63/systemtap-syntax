@@ -122,9 +122,6 @@
 				},
 				{
 					"include": "#variable"
-				},
-				{
-					"include": "#array"
 				}
 			]
 		},
@@ -150,7 +147,6 @@
 			"name": "variable.other.systemtap",
 			"match": "(@?[a-zA-Z0-9_$]+(?=[^a-zA-Z0-9_$]))"
 		},
-		"array": {},
 		"function_dec": {
 			"begin": "(function)\\s+([\\w.]+)",
 			"end": "(?=\\%?{)",
@@ -173,7 +169,7 @@
 					"end": "(?=[)])",
 					"patterns": [
 						{
-							"match": "(?<=:)([^\\s,):]+)",
+							"match": "(?<=:)\\s*([^\\s,):]+)",
 							"name": "storage.type.built-in.systemtap"
 						},
 						{
@@ -205,14 +201,6 @@
 						},
 						{
 							"include": "#number"
-						},
-						{
-							"match": "(?<=:)([^\\s,):]+)",
-							"name": "storage.type.built-in.systemtap"
-						},
-						{
-							"match": "[^\\s,):]+",
-							"name": "variable.parameter"
 						}
 					]
 				}
