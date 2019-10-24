@@ -418,9 +418,14 @@
 		"embedded": {
 			"patterns": [
 				{
-					"name": "meta.embedded.block.c",
+					"contentName": "meta.embedded.block.c",
 					"begin": "%{",
-					"end": "%}"
+					"end": "%}",
+					"patterns": [
+						{
+							"include": "source.c"
+						}
+					]
 				}
 			]
 		}
