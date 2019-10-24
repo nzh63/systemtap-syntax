@@ -2,7 +2,7 @@
     "name": "systemtap-syntax",
     "displayName": "SystemTap syntax",
     "description": "SystemTap syntax highlighting support",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "publisher": "nzh21",
     "repository": {
         "type": "git",
