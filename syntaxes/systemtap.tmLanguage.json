@@ -54,6 +54,14 @@
 					"match": "(\\+=|-=|\\*=|/=|%=)"
 				},
 				{
+					"name": "punctuation.separator.pointer-access.systemtap",
+					"match": "(->)"
+				},
+				{
+					"name": "keyword.operator.comparison.systemtap",
+					"match": "(<=?|>=?|==|!=)"
+				},
+				{
 					"name": "keyword.operator.arithmetic.systemtap",
 					"match": "(\\+|-|\\*|/|%)"
 				},
@@ -344,8 +352,16 @@
 		"number": {
 			"patterns": [
 				{
+					"name": "constant.numeric.hex.systemtap",
+					"match": "(0x[0-9a-fA-f]+)"
+				},
+				{
+					"name": "constant.numeric.octal.systemtap",
+					"match": "(0[0-7]*)"
+				},
+				{
 					"name": "constant.numeric.decimal.systemtap",
-					"match": "(\\d+|0x[0-9a-fA-f]+|0[0-7]*)"
+					"match": "(\\d+)"
 				}
 			]
 		},
