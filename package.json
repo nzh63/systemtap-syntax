@@ -1,0 +1,50 @@
+{
+    "name": "systemtap-syntax",
+    "displayName": "SystemTap syntax",
+    "description": "SystemTap syntax highlighting support",
+    "version": "0.1.0",
+    "publisher": "nzh21",
+    "repository": {
+        "type": "git",
+        "url": "git@github.com:nzh63/systemtap-syntax.git"
+    },
+    "scripts": {
+        "pack": "vsce package --yarn -o ./build/systemtap-syntax.vsix"
+    },
+    "engines": {
+        "vscode": "^1.39.0"
+    },
+    "categories": [
+        "Programming Languages"
+    ],
+    "contributes": {
+        "languages": [
+            {
+                "id": "systemtap",
+                "aliases": [
+                    "SystemTap",
+                    "systemtap"
+                ],
+                "extensions": [
+                    ".stp"
+                ],
+                "configuration": "./language-configuration.json"
+            }
+        ],
+        "grammars": [
+            {
+                "language": "systemtap",
+                "scopeName": "source.systemtap",
+                "path": "./syntaxes/systemtap.tmLanguage.json",
+                "injectTo": ["source.c"],
+                "embeddedLanguages": {
+                    "meta.embedded.block.c": "c"
+                }
+            }
+        ]
+    },
+    "license": "MIT",
+    "devDependencies": {
+        "vsce": "^1.68.0"
+    }
+}
