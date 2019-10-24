@@ -396,7 +396,7 @@
 			]
 		},
 		"macro": {
-			"begin": "(@(?:defined|define))",
+			"begin": "(@define(?!d))",
 			"end": "(?<!\\\\)(?=(?:\\%\\(|\\n))",
 			"beginCaptures": {
 				"1": {
