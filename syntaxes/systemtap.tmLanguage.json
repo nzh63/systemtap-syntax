@@ -152,7 +152,7 @@
 		},
 		"array": {},
 		"function_dec": {
-			"begin": "(function)\\s+([\\w.]+)",
+			"begin": "(function)\\s([\\w.]+)",
 			"end": "(?=\\%?{)",
 			"beginCaptures": {
 				"1": {
@@ -164,12 +164,7 @@
 			},
 			"patterns": [
 				{
-					"begin": "(?:(?<=:)\\s*([^\\s\\:]+))?(\\()",
-					"beginCaptures": {
-						"1": {
-							"name": "storage.type.built-in.systemtap"
-						}
-					},
+					"begin": "(\\()",
 					"end": "(?=[)])",
 					"patterns": [
 						{
@@ -185,36 +180,45 @@
 			]
 		},
 		"probe_dec": {
-			"begin": "(probe)\\s([\\w.]+)",
+			"begin": "(probe)\\s+(?![#\\{]+)",
 			"end": "(?=\\{)",
 			"beginCaptures": {
 				"1": {
 					"name": "keyword.control.systemtap"
-				},
-				"2": {
-					"name": "entity.name.function.definition.systemtap"
 				}
 			},
 			"patterns": [
+				{
+					"include": "#comment"
+				},
+				{
+					"match": "(process|function|module|statement|begin|end|syscall|return|call|never)(?![@a-zA-Z0-9_$])",
+					"name": "keyword.control.systemtap"
+				},
+				{
+					"match": "([\\w]+)",
+					"name": "entity.name.function.definition.systemtap"
+				},
+				{
+					"match": "(\\.)",
+					"name": "punctuation.separator.dot.systemtap"
+				},
 				{
 					"begin": "(\\()",
 					"end": "(?=[)])",
 					"patterns": [
 						{
-							"include": "#string_context"
+							"include": "#expr"
 						},
 						{
-							"include": "#number"
-						},
-						{
-							"match": "(?<=:)([^\\s,):]+)",
-							"name": "storage.type.built-in.systemtap"
-						},
-						{
-							"match": "[^\\s,):]+",
+							"match": "[^\\s,)]+",
 							"name": "variable.parameter"
 						}
 					]
+				},
+				{
+					"match": "([*!?])",
+					"name": "keyword.operator.systemtap"
 				}
 			]
 		},
@@ -396,7 +400,7 @@
 			]
 		},
 		"macro": {
-			"begin": "(@(?:defined|define))",
+			"begin": "(@define(?!d))",
 			"end": "(?<!\\\\)(?=(?:\\%\\(|\\n))",
 			"beginCaptures": {
 				"1": {
