@@ -152,7 +152,7 @@
 		},
 		"array": {},
 		"function_dec": {
-			"begin": "(function)\\s([\\w.]+)",
+			"begin": "(function)\\s+([\\w.]+)",
 			"end": "(?=\\%?{)",
 			"beginCaptures": {
 				"1": {
@@ -164,7 +164,12 @@
 			},
 			"patterns": [
 				{
-					"begin": "(\\()",
+					"begin": "(?:(?<=:)\\s*([^\\s\\:]+))?(\\()",
+					"beginCaptures": {
+						"1": {
+							"name": "storage.type.built-in.systemtap"
+						}
+					},
 					"end": "(?=[)])",
 					"patterns": [
 						{
@@ -196,10 +201,17 @@
 					"end": "(?=[)])",
 					"patterns": [
 						{
-							"include": "#expr"
+							"include": "#string_context"
 						},
 						{
-							"match": "[^\\s,)]+",
+							"include": "#number"
+						},
+						{
+							"match": "(?<=:)([^\\s,):]+)",
+							"name": "storage.type.built-in.systemtap"
+						},
+						{
+							"match": "[^\\s,):]+",
 							"name": "variable.parameter"
 						}
 					]
