@@ -1,13 +1,14 @@
 import * as vscode from 'vscode';
 
-import { syscallAction, vfsAction, buildinFunction } from './doc';
+import { syscallAction, vfsAction, buildinFunction, probe as otherProbe } from './doc';
 
 const keyword: vscode.CompletionItem[] = ['global', 'function', 'probe', 'while', 'for', 'foreach', 'in', 'limit', 'for', 'break', 'continue', 'return', 'next', 'delete', 'try', 'catch']
-		.map(i => {
-			let j = new vscode.CompletionItem(i);
-			j.kind = vscode.CompletionItemKind.Keyword;
-			return j;
-		});
+	.map(i => {
+		let j = new vscode.CompletionItem(i);
+		j.kind = vscode.CompletionItemKind.Keyword;
+		return j;
+	});
+const otherProbeKey = Object.keys(otherProbe).map(i => new vscode.CompletionItem(i));
 
 function provideCompletionItems(
 	document: vscode.TextDocument,
@@ -25,7 +26,6 @@ function provideCompletionItemsAfterProbe(
 	context: vscode.CompletionContext
 ) {
 	let input = document.lineAt(position).text.substring(0, position.character);
-	console.log(input);
 
 	let afterProbe: vscode.CompletionItem[] = [];
 
@@ -95,8 +95,16 @@ function provideCompletionItemsAfterProbe(
 				return j;
 			});
 	}
+	let afterOther: vscode.CompletionItem[] = [];
+	for (const i in otherProbe) {
+		if (RegExp(i + '\\.$').test(input)) {
+			afterOther = otherProbe[i];
+			break;
+		}
+	}
+
 	if (/probe\s+$/.test(input)) {
-		afterProbe = [kernel, syscall, vfs, _module, process, begin, end, timer];
+		afterProbe = [kernel, syscall, vfs, _module, process, begin, end, timer, ...otherProbeKey];
 	}
 
 	return [
@@ -106,7 +114,8 @@ function provideCompletionItemsAfterProbe(
 		...afterVfs,
 		...afterModule,
 		...afterProcess,
-		...afterTimer
+		...afterTimer,
+		...afterOther
 	];
 }
 
