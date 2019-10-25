@@ -1,6 +1,8 @@
 import * as vscode from 'vscode';
 
 import { syscallAction, vfsAction, buildinFunction, probe as otherProbe } from './doc';
+import BuildinFunctionRaw from './doc/buildinFunction';
+import ProbeRaw from './doc//probe';
 
 const keyword: vscode.CompletionItem[] = ['global', 'function', 'probe', 'while', 'for', 'foreach', 'in', 'limit', 'for', 'break', 'continue', 'return', 'next', 'delete', 'try', 'catch']
 	.map(i => {
@@ -119,14 +121,33 @@ function provideCompletionItemsAfterProbe(
 	];
 }
 
+function provideHover(
+	document: vscode.TextDocument,
+	position: vscode.Position,
+	token: vscode.CancellationToken
+) {
+	const word = document.getText(document.getWordRangeAtPosition(position));
+	let functionDoc = BuildinFunctionRaw.filter(i => i.name === word);
+	if (functionDoc.length) {
+		return new vscode.Hover(functionDoc[0].doc);
+	}
+	let probenDoc = BuildinFunctionRaw.filter(i => RegExp(i.name).test(word)) ;
+	if (probenDoc.length) {
+		return new vscode.Hover(functionDoc.reduce((a, i) => a + i.doc + '\n***\n', ''));
+	}
+}
+
+
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
 	let autoCompletion = vscode.languages.registerCompletionItemProvider('systemtap', { provideCompletionItems });
 	let autoCompletionSpace = vscode.languages.registerCompletionItemProvider('systemtap', { provideCompletionItems: provideCompletionItemsAfterProbe }, ' ');
 	let autoCompletionDot = vscode.languages.registerCompletionItemProvider('systemtap', { provideCompletionItems: provideCompletionItemsAfterProbe }, '.');
-
-	context.subscriptions.push(autoCompletion, autoCompletionSpace, autoCompletionDot);
+	let hoverProvider = vscode.languages.registerHoverProvider('systemtap', {
+        provideHover
+    });
+	context.subscriptions.push(autoCompletion, autoCompletionSpace, autoCompletionDot, hoverProvider);
 }
 
 // this method is called when your extension is deactivated

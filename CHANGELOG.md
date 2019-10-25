@@ -1,13 +1,17 @@
 # Change Log
 
+## v0.3.4
+
+- Add hover information
+
 ## v0.3.3
 
-- document in more detail
+- Document in more detail
 
 ## v0.3.2
 
-- fix highlighting bugs of funcion declaration with space
-- fix highlighting bugs of funcion declaration or probe declaration with comment
+- Fix highlighting bugs of funcion declaration with space
+- Fix highlighting bugs of funcion declaration or probe declaration with comment
 
 ## v0.3.1
 
@@ -16,7 +20,7 @@
 ## v0.3.0
 
 - Auto completion
-- fix some highlighting bugs
+- Fix some highlighting bugs
 
 ## v0.2.0
 
@@ -24,7 +28,7 @@
 
 ## v0.1.1
 
-- fix bug while opening a C file
+- Fix bug while opening a C file
 
 ## v0.1.0
 
