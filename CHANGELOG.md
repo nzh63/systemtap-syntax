@@ -1,9 +1,13 @@
 # Change Log
 
+## v0.3.8
+
+- Add some macro and build-in function.
+
 ## v0.3.7
 
 - Fix highlighting bugs of funcion's retuen type.
-- Add
+- Add macro
 - Change documrnt format
 
 ## v0.3.6

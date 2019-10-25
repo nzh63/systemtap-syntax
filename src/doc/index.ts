@@ -9,6 +9,7 @@ let syscall: vscode.CompletionItem[] = [];
 let vfs: vscode.CompletionItem[] = [];
 let buildinFunction: vscode.CompletionItem[] = [];
 let probe: {[index: string]:vscode.CompletionItem[]} = {};
+let macro: vscode.CompletionItem[] = [];
 
 for (const i of Syscall) {
     let name = i.name;
@@ -40,16 +41,16 @@ for (const i of BuildinFunction) {
     let name = i.name;
     let action = new vscode.CompletionItem(name);
     action.kind = vscode.CompletionItemKind.Function;
-    action.documentation = new vscode.MarkdownString(i.doc);
+    if (i.doc) action.documentation = new vscode.MarkdownString(i.doc);
     buildinFunction.push(action);
 }
 
 for (const i of Macro) {
     let name = i.name;
-    let action = new vscode.CompletionItem(name);
+    let action = new vscode.CompletionItem(name.substr(1));
     action.kind = vscode.CompletionItemKind.Function;
-    action.documentation = new vscode.MarkdownString(i.doc);
-    buildinFunction.push(action);
+    if (i.doc) action.documentation = new vscode.MarkdownString(i.doc);
+    macro.push(action);
 }
 
 for (const i of Probe) {
@@ -59,8 +60,8 @@ for (const i of Probe) {
     probe[type] = probe[type] || [];
     let action = new vscode.CompletionItem(name);
     action.kind = vscode.CompletionItemKind.Property;
-    action.documentation = new vscode.MarkdownString(i.doc);
+    if (i.doc) action.documentation = new vscode.MarkdownString(i.doc);
     probe[type].push(action);
 }
 
-export { syscall as syscallAction, vfs as vfsAction, buildinFunction, probe };
+export { syscall as syscallAction, vfs as vfsAction, buildinFunction, probe, macro };

@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 
-import { syscallAction, vfsAction, buildinFunction, probe as otherProbe } from './doc';
+import { syscallAction, vfsAction, buildinFunction, probe as otherProbe, macro } from './doc';
 import BuildinFunctionRaw from './doc/buildinFunction';
 import ProbeRaw from './doc/probe';
 import syscallRaw from './doc/syscall';
@@ -24,7 +24,7 @@ function provideCompletionItems(
 	token: vscode.CancellationToken,
 	context: vscode.CompletionContext
 ) {
-	return [...keyword, ...buildinFunction];
+	return [...keyword, ...buildinFunction, ...macro];
 }
 
 function provideCompletionItemsAfterProbe(
@@ -46,21 +46,27 @@ function provideCompletionItemsAfterProbe(
 
 	let kernel = new vscode.CompletionItem('kernel');
 	kernel.commitCharacters = ['.'];
-	kernel.kind = vscode.CompletionItemKind.Unit;
 	let afterKernel: vscode.CompletionItem[] = [];
 
 	if (/kernel\.$/.test(input)) {
-		afterKernel = ['function', 'trace']
+		afterKernel = ['function', 'trace', 'statement']
 			.map(i => {
 				let j = new vscode.CompletionItem(i);
-				j.insertText = new vscode.SnippetString(i + '("${1}")');
+				j.insertText = new vscode.SnippetString(i + '(${1})');
 				return j;
 			});
+	}
+	if (/kernel\.function\(".*?(?<!\\)"\)\.$/.test(input)) {
+		afterKernel = ['call', 'return', 'inline']
+			.map(i => new vscode.CompletionItem(i));
+	}
+	if (/kernel\.statement\(".*?(?<!\\)"\)\.$/.test(input)) {
+		afterKernel = ['absolute']
+			.map(i => new vscode.CompletionItem(i));
 	}
 
 	let vfs = new vscode.CompletionItem('vfs');
 	vfs.commitCharacters = ['.'];
-	vfs.kind = vscode.CompletionItemKind.Unit;
 	let afterVfs: vscode.CompletionItem[] = [];
 
 	if (/vfs\.$/.test(input)) {
@@ -76,7 +82,7 @@ function provideCompletionItemsAfterProbe(
 		fun.insertText = new vscode.SnippetString('function("${1}")');
 		afterModule = [fun];
 	} else if (/module\("[^"]*"\)\.function\("[^"]*"\)\.$/.test(input)) {
-		afterModule = ['call', 'return']
+		afterModule = ['call', 'return', 'inline']
 			.map(i => new vscode.CompletionItem(i));
 	}
 
@@ -159,7 +165,7 @@ function provideHover(
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
 	let autoCompletion = vscode.languages.registerCompletionItemProvider('systemtap', { provideCompletionItems });
-	let autoCompletionAt = vscode.languages.registerCompletionItemProvider('systemtap', { provideCompletionItems }, '@');
+	let autoCompletionAt = vscode.languages.registerCompletionItemProvider('systemtap', { provideCompletionItems: () => macro }, '@');
 	let autoCompletionSpace = vscode.languages.registerCompletionItemProvider('systemtap', { provideCompletionItems: provideCompletionItemsAfterProbe }, ' ');
 	let autoCompletionDot = vscode.languages.registerCompletionItemProvider('systemtap', { provideCompletionItems: provideCompletionItemsAfterProbe }, '.');
 	let hoverProvider = vscode.languages.registerHoverProvider('systemtap', {
