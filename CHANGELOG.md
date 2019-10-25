@@ -1,5 +1,9 @@
 # Change Log
 
+## v0.3.3
+
+- document in more detai
+
 ## v0.3.2
 
 - fix highlighting bugs of funcion declaration with space

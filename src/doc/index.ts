@@ -31,21 +31,20 @@ for (const i of Vfs as string[]) {
     vfs.push(action_return);
 }
 
-for (const i of BuildinFunction as string[]) {
-    let name = i.split(' ')[0];
-    name = name.replace(/function::/, '');
+for (const i of BuildinFunction) {
+    let name = i.name;
     let action = new vscode.CompletionItem(name);
-    action.documentation = i.replace(' — ', '\n');
+    action.documentation = new vscode.MarkdownString(i.doc);
     buildinFunction.push(action);
 }
 
-for (const i of Probe as string[]) {
-    let fullname = i.replace(/probe::/, '').split(' ')[0];
+for (const i of Probe) {
+    let fullname = i.name;
     let type = fullname.split('.')[0];
     let name = fullname.replace(type + '.', '');
     probe[type] = probe[type] || [];
     let action = new vscode.CompletionItem(name);
-    action.documentation = i.replace(' — ', '\n');
+    action.documentation = new vscode.MarkdownString(i.doc);
     probe[type].push(action);
 }
 
