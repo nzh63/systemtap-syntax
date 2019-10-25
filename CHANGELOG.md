@@ -1,5 +1,9 @@
 # Change Log
 
+## v0.3.6
+
+- Fix hover information
+
 ## v0.3.5
 
 - Fix document

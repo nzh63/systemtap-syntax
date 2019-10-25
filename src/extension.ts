@@ -132,22 +132,23 @@ function provideHover(
 	position: vscode.Position,
 	token: vscode.CancellationToken
 ) {
-	const word = document.getText(document.getWordRangeAtPosition(position));
+	const word = document.getText(document.getWordRangeAtPosition(position, /[@a-zA-Z0-9_$.]+/));
+	console.log(word);
 	let functionDoc = BuildinFunctionRaw.filter(i => i.name === word);
 	if (functionDoc.length) {
 		return new vscode.Hover(functionDoc[0].doc);
 	}
-	let probenDoc = ProbeRaw.filter(i => RegExp(i.name).test(word)) ;
+	let probenDoc = ProbeRaw.filter(i => i.name === word) ;
 	if (probenDoc.length) {
-		return new vscode.Hover(functionDoc.reduce((a, i) => a + i.doc + '\n***\n', ''));
+		return new vscode.Hover(probenDoc[0].doc);
 	}
-	let syscallnDoc = syscallRaw.filter(i => RegExp(i.name).test(word));
+	let syscallnDoc = syscallRaw.filter(i => i.name === word);
 	if (syscallnDoc.length) {
-		return new vscode.Hover(syscallnDoc.reduce((a, i) => a + i.doc + '\n***\n', ''));
+		return new vscode.Hover(syscallnDoc[0].doc);
 	}
-	let vfsDoc = vfsRaw.filter(i => RegExp(i.name).test(word));
+	let vfsDoc = vfsRaw.filter(i => i.name === word);
 	if (vfsDoc.length) {
-		return new vscode.Hover(vfsDoc.reduce((a, i) => a + i.doc + '\n***\n', ''));
+		return new vscode.Hover(vfsDoc[0].doc);
 	}
 
 }
