@@ -160,10 +160,6 @@
 					"include": "#comment"
 				},
 				{
-					"match": "([@a-zA-Z0-9_$.]+)",
-					"name": "entity.name.function.definition.systemtap"
-				},
-				{
 					"begin": "(?:(?<=:)\\s*([^\\s\\:]+))?(\\()",
 					"beginCaptures": {
 						"1": {
@@ -184,6 +180,10 @@
 							"name": "variable.parameter"
 						}
 					]
+				},
+				{
+					"match": "([@a-zA-Z0-9_$.]+)",
+					"name": "entity.name.function.definition.systemtap"
 				}
 			]
 		},
@@ -194,8 +194,7 @@
 				"1": {
 					"name": "keyword.control.systemtap"
 				},
-				"2": {
-				}
+				"2": {}
 			},
 			"patterns": [
 				{

@@ -1,5 +1,9 @@
 # Change Log
 
+## v0.3.7
+
+- Fix highlighting bugs of funcion's retuen type.
+
 ## v0.3.6
 
 - Fix hover information
