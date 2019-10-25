@@ -3,6 +3,7 @@
 ## v0.3.6
 
 - Fix hover information
+- Fix documrnt for `.return`
 
 ## v0.3.5
 
