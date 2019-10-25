@@ -3,7 +3,7 @@
 	"displayName": "systemtap-syntax",
 	"license": "MIT",
 	"description": "SystemTap syntax highlighting support and auto completion ",
-	"version": "0.3.4",
+	"version": "0.3.5",
 	"publisher": "nzh21",
 	"repository": {
 		"type": "git",
