@@ -46,6 +46,7 @@ function provideCompletionItemsAfterProbe(
 
 	let kernel = new vscode.CompletionItem('kernel');
 	kernel.commitCharacters = ['.'];
+	kernel.kind = vscode.CompletionItemKind.Unit;
 	let afterKernel: vscode.CompletionItem[] = [];
 
 	if (/kernel\.$/.test(input)) {
@@ -59,6 +60,7 @@ function provideCompletionItemsAfterProbe(
 
 	let vfs = new vscode.CompletionItem('vfs');
 	vfs.commitCharacters = ['.'];
+	vfs.kind = vscode.CompletionItemKind.Unit;
 	let afterVfs: vscode.CompletionItem[] = [];
 
 	if (/vfs\.$/.test(input)) {
@@ -157,12 +159,13 @@ function provideHover(
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
 	let autoCompletion = vscode.languages.registerCompletionItemProvider('systemtap', { provideCompletionItems });
+	let autoCompletionAt = vscode.languages.registerCompletionItemProvider('systemtap', { provideCompletionItems }, '@');
 	let autoCompletionSpace = vscode.languages.registerCompletionItemProvider('systemtap', { provideCompletionItems: provideCompletionItemsAfterProbe }, ' ');
 	let autoCompletionDot = vscode.languages.registerCompletionItemProvider('systemtap', { provideCompletionItems: provideCompletionItemsAfterProbe }, '.');
 	let hoverProvider = vscode.languages.registerHoverProvider('systemtap', {
 		provideHover
 	});
-	context.subscriptions.push(autoCompletion, autoCompletionSpace, autoCompletionDot, hoverProvider);
+	context.subscriptions.push(autoCompletion, autoCompletionAt, autoCompletionSpace, autoCompletionDot, hoverProvider);
 }
 
 // this method is called when your extension is deactivated

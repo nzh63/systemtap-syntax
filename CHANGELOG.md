@@ -3,6 +3,8 @@
 ## v0.3.7
 
 - Fix highlighting bugs of funcion's retuen type.
+- Add
+- Change documrnt format
 
 ## v0.3.6
 
