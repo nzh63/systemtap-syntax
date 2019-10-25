@@ -2,7 +2,9 @@ import * as vscode from 'vscode';
 
 import { syscallAction, vfsAction, buildinFunction, probe as otherProbe } from './doc';
 import BuildinFunctionRaw from './doc/buildinFunction';
-import ProbeRaw from './doc//probe';
+import ProbeRaw from './doc/probe';
+import syscallRaw from './doc/syscall';
+import vfsRaw from './doc/vfs';
 
 const keyword: vscode.CompletionItem[] = ['global', 'function', 'probe', 'while', 'for', 'foreach', 'in', 'limit', 'for', 'break', 'continue', 'return', 'next', 'delete', 'try', 'catch']
 	.map(i => {
@@ -135,10 +137,19 @@ function provideHover(
 	if (functionDoc.length) {
 		return new vscode.Hover(functionDoc[0].doc);
 	}
-	let probenDoc = BuildinFunctionRaw.filter(i => RegExp(i.name).test(word)) ;
+	let probenDoc = ProbeRaw.filter(i => RegExp(i.name).test(word)) ;
 	if (probenDoc.length) {
 		return new vscode.Hover(functionDoc.reduce((a, i) => a + i.doc + '\n***\n', ''));
 	}
+	let syscallnDoc = syscallRaw.filter(i => RegExp(i.name).test(word));
+	if (syscallnDoc.length) {
+		return new vscode.Hover(syscallnDoc.reduce((a, i) => a + i.doc + '\n***\n', ''));
+	}
+	let vfsDoc = vfsRaw.filter(i => RegExp(i.name).test(word));
+	if (vfsDoc.length) {
+		return new vscode.Hover(vfsDoc.reduce((a, i) => a + i.doc + '\n***\n', ''));
+	}
+
 }
 
 

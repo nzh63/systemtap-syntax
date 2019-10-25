@@ -9,25 +9,25 @@ let vfs: vscode.CompletionItem[] = [];
 let buildinFunction: vscode.CompletionItem[] = [];
 let probe: {[index: string]:vscode.CompletionItem[]} = {};
 
-for (const i of Syscall as string[]) {
-    let name = i.split(' ')[0];
+for (const i of Syscall) {
+    let name = i.name;
     name = name.replace(/syscall\./, '');
     let action = new vscode.CompletionItem(name);
-    action.documentation = i.replace(' — ', '\n');
+    action.documentation = i.doc;
     syscall.push(action);
     let action_return = new vscode.CompletionItem(name + '.return');
-    action_return.documentation = i.replace(' — ', '\n');
+    action_return.documentation = i.doc;
     syscall.push(action_return);
 }
 
-for (const i of Vfs as string[]) {
-    let name = i.split(' ')[0];
+for (const i of Vfs) {
+    let name = i.name;
     name = name.replace(/vfs\./, '');
     let action = new vscode.CompletionItem(name);
-    action.documentation = i.replace(' — ', '\n');
+    action.documentation = i.doc;
     vfs.push(action);
     let action_return = new vscode.CompletionItem(name + '.return');
-    action_return.documentation = i.replace(' — ', '\n');
+    action_return.documentation = i.doc;
     vfs.push(action_return);
 }
 
