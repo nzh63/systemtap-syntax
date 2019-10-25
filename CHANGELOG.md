@@ -2,7 +2,7 @@
 
 ## v0.3.3
 
-- document in more detai
+- document in more detal
 
 ## v0.3.2
 
