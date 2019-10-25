@@ -1,4 +1,3 @@
 # systemtap
 
-SystemTap syntax highlighting support
-sdsd
+SystemTap syntax highlighting support and auto completion.
