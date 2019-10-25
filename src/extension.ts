@@ -10,7 +10,11 @@ const keyword: vscode.CompletionItem[] = ['global', 'function', 'probe', 'while'
 		j.kind = vscode.CompletionItemKind.Keyword;
 		return j;
 	});
-const otherProbeKey = Object.keys(otherProbe).map(i => new vscode.CompletionItem(i));
+const otherProbeKey = Object.keys(otherProbe).map(i => {
+	let j = new vscode.CompletionItem(i);
+	j.commitCharacters = ['.'];
+	return j;
+});
 
 function provideCompletionItems(
 	document: vscode.TextDocument,

@@ -3,6 +3,7 @@
 ## v0.3.4
 
 - Add hover information
+- Add input '.' to commit some auto completion word.
 
 ## v0.3.3
 
