@@ -148,17 +148,21 @@
 			"match": "(@?[a-zA-Z0-9_$]+(?=[^a-zA-Z0-9_$]))"
 		},
 		"function_dec": {
-			"begin": "(function)\\s+([\\w.]+)",
+			"begin": "(function)(?=(?:\\s|/|#))",
 			"end": "(?=\\%?{)",
 			"beginCaptures": {
 				"1": {
 					"name": "keyword.control.systemtap"
-				},
-				"2": {
-					"name": "entity.name.function.definition.systemtap"
 				}
 			},
 			"patterns": [
+				{
+					"include": "#comment"
+				},
+				{
+					"match": "([@a-zA-Z0-9_$.]+)",
+					"name": "entity.name.function.definition.systemtap"
+				},
 				{
 					"begin": "(?:(?<=:)\\s*([^\\s\\:]+))?(\\()",
 					"beginCaptures": {
@@ -169,11 +173,14 @@
 					"end": "(?=[)])",
 					"patterns": [
 						{
+							"include": "#comment"
+						},
+						{
 							"match": "(?<=:)\\s*([^\\s,):]+)",
 							"name": "storage.type.built-in.systemtap"
 						},
 						{
-							"match": "[^\\s,):]+",
+							"match": "[a-zA-Z0-9_$]+",
 							"name": "variable.parameter"
 						}
 					]
@@ -181,21 +188,34 @@
 			]
 		},
 		"probe_dec": {
-			"begin": "(probe)\\s([\\w.]+)",
+			"begin": "(probe)(?=(?:\\s|/|#))",
 			"end": "(?=\\{)",
 			"beginCaptures": {
 				"1": {
 					"name": "keyword.control.systemtap"
 				},
 				"2": {
-					"name": "entity.name.function.definition.systemtap"
 				}
 			},
 			"patterns": [
 				{
+					"include": "#comment"
+				},
+				{
+					"match": "([*!?])",
+					"name": "keyword.operator.quantifier.systemtap"
+				},
+				{
+					"match": "([@a-zA-Z0-9_$.]+)",
+					"name": "entity.name.function.definition.systemtap"
+				},
+				{
 					"begin": "(\\()",
 					"end": "(?=[)])",
 					"patterns": [
+						{
+							"include": "#comment"
+						},
 						{
 							"include": "#string_context"
 						},
@@ -369,11 +389,11 @@
 			"name": "comment",
 			"patterns": [
 				{
-					"name": "comment.line",
+					"name": "comment.line.double-slash",
 					"match": "//.*"
 				},
 				{
-					"name": "comment.line",
+					"name": "comment.line.number-sign",
 					"match": "#.*"
 				},
 				{

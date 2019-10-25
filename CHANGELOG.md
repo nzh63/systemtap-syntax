@@ -2,7 +2,8 @@
 
 ## v0.3.2
 
-- fix some highlighting bugs
+- fix highlighting bugs of funcion declaration with space
+- fix highlighting bugs of funcion declaration or probe declaration with comment
 
 ## v0.3.1
 
