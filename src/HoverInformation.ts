@@ -4,6 +4,7 @@ import BuildinFunctionRaw from './doc/buildinFunction';
 import ProbeRaw from './doc/probe';
 import syscallRaw from './doc/syscall';
 import vfsRaw from './doc/vfs';
+import macroRaw from './doc/macro';
 
 function provideHover(
 	document: vscode.TextDocument,
@@ -14,6 +15,10 @@ function provideHover(
 	let functionDoc = BuildinFunctionRaw.filter(i => i.name === word);
 	if (functionDoc.length) {
 		return new vscode.Hover(functionDoc[0].doc);
+	}
+	let macroDoc = macroRaw.filter(i => i.name === word);
+	if (macroDoc.length && macroDoc[0].doc) {
+		return new vscode.Hover(macroDoc[0].doc);
 	}
 	let probenDoc = ProbeRaw.filter(i => i.name === word);
 	if (probenDoc.length) {
