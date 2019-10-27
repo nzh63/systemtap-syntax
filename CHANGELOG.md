@@ -4,6 +4,7 @@
 
 - Add some macro and build-in function.
 - Add hover information for macro.
+- Show signature info while inputting a build-in function.
 
 ## v0.3.7
 
