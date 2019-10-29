@@ -403,7 +403,7 @@
 			]
 		},
 		"macro": {
-			"begin": "(@(?:defined|define))",
+			"begin": "(@define(?=\\s))",
 			"end": "(?<!\\\\)(?=(?:\\%\\(|\\n))",
 			"beginCaptures": {
 				"1": {
