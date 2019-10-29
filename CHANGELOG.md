@@ -34,6 +34,7 @@
 ## v0.3.3
 
 - Document in more detail.
+- now VSCode will processe `%{`, `%}`, `%(`, `%)` as a whole.
 
 ## v0.3.2
 
