@@ -5,6 +5,7 @@ import macroRaw from './doc/macroLike';
 
 class StapSignatureHelpProvider implements vscode.SignatureHelpProvider {
     signature: string | null = null;
+    description: string | null = null;
     parameters: vscode.ParameterInformation[] = []
     activeParameter = 0;
     maxParameter = 0;
@@ -28,6 +29,7 @@ class StapSignatureHelpProvider implements vscode.SignatureHelpProvider {
         signatureHelp.activeParameter = this.activeParameter;
         let signatureInformation = new vscode.SignatureInformation(this.signature);
         signatureInformation.parameters = this.parameters;
+        if (this.description) signatureInformation.documentation = this.description;
         signatureHelp.signatures = [signatureInformation];
         return signatureHelp;
     }
@@ -58,15 +60,18 @@ class StapSignatureHelpProvider implements vscode.SignatureHelpProvider {
             newSignature = (functionDoc[0].doc.match(/\*\*Synopsis\*\*[\s\n]*```([\S\s\n]*?)```/) || [null, null])[1];
             newDoc = functionDoc[0].doc;
         }
+        let description = null;
         if (newSignature) {
-            let argDoc = ((newDoc || '').match(/\*\*Arguments\*\*[\s\n]*([\S\s\n]*?)(?=\*\*)/) || [null, null])[1];
+            description = ((newDoc || '').match(/\*\*Description\*\*[\s\n]*([\S\s\n]*?)(?=\*\*|$)/) || [null, null])[1];
+            if (description) description = description.trim();
+            let argDoc = ((newDoc || '').match(/\*\*Arguments\*\*[\s\n]*([\S\s\n]*?)(?=\*\*|$)/) || [null, null])[1];
             let doc = (argDoc || '').trim().split('\n\n').map(s => (s.match(/^`.*?`(.*)$/) || [null, null])[1]);
             newSignature = newSignature.trim();
             this.parameters = [];
             let i = 0;
             for (const label of newSignature.replace(/^.*\(/, '').replace(/\)$/, '').split(',')) {
                 if (doc[i]) {
-                    this.parameters.push(new vscode.ParameterInformation(label, doc[i] as string));
+                    this.parameters.push(new vscode.ParameterInformation(label, (doc[i] as string).trim()));
                 } else {
                     this.parameters.push(new vscode.ParameterInformation(label));
                 }
@@ -79,6 +84,7 @@ class StapSignatureHelpProvider implements vscode.SignatureHelpProvider {
             this.bracket++;
         }
         this.signature = newSignature;
+        this.description = description;
     }
 }
 
