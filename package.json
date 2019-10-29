@@ -1,8 +1,8 @@
 {
 	"name": "systemtap-syntax",
-	"displayName": "systemtap-syntax",
+	"displayName": "SystemTap",
 	"license": "MIT",
-	"description": "SystemTap syntax highlighting support and auto completion ",
+	"description": "Language support for SystemTap script",
 	"version": "0.3.9",
 	"publisher": "nzh21",
 	"repository": {
