@@ -1,5 +1,9 @@
 # Change Log
 
+## v0.4.0
+
+- Add goto definition.
+
 ## v0.3.10
 
 - Fix syntax highlight of embedded C code. (See ([microsoft/vscode#64966](https://github.com/microsoft/vscode/issues/34525) & [atom/language-c#146](https://github.com/atom/language-c/issues/146)) for more information)
