@@ -1,5 +1,9 @@
 # Change Log
 
+## v0.3.9
+
+- fix document of build-in function which has two or moresynopsis
+
 ## v0.3.8
 
 - Add some macro and build-in function.
@@ -10,12 +14,12 @@
 
 - Fix highlighting bugs of funcion's retuen type.
 - Add macro
-- Change documrnt format
+- Change document format
 
 ## v0.3.6
 
 - Fix hover information
-- Fix documrnt for `.return`
+- Fix document for `.return`
 
 ## v0.3.5
 
