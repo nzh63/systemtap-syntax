@@ -50,22 +50,23 @@ class StapSignatureHelpProvider implements vscode.SignatureHelpProvider {
         let macroDoc = macroRaw.filter(i => i.name === word);
         if (macroDoc.length && macroDoc[0].doc) {
             newSignature = (macroDoc[0].doc.match(/\*\*Synopsis\*\*[\s\n]*```([\S\s\n]*?)```/) || [null, null])[1];
-            newDoc = (macroDoc[0].doc.match(/\*\*Arguments\*\*[\s\n]*([\S\s\n]*?)(?=\*\*)/) || [null, null])[1];
+            newDoc = macroDoc[0].doc;
         }
 
         let functionDoc = BuildinFunctionRaw.filter(i => i.name === word);
         if (functionDoc.length) {
             newSignature = (functionDoc[0].doc.match(/\*\*Synopsis\*\*[\s\n]*```([\S\s\n]*?)```/) || [null, null])[1];
-            newDoc = (functionDoc[0].doc.match(/\*\*Arguments\*\*[\s\n]*([\S\s\n]*?)(?=\*\*)/) || [null, null])[1];
+            newDoc = functionDoc[0].doc;
         }
         if (newSignature) {
-            let doc = (newDoc || '').trim().split('\n\n').map(s => s.replace(/`.*?`/, ''));
+            let argDoc = ((newDoc || '').match(/\*\*Arguments\*\*[\s\n]*([\S\s\n]*?)(?=\*\*)/) || [null, null])[1];
+            let doc = (argDoc || '').trim().split('\n\n').map(s => (s.match(/^`.*?`(.*)$/) || [null, null])[1]);
             newSignature = newSignature.trim();
             this.parameters = [];
             let i = 0;
             for (const label of newSignature.replace(/^.*\(/, '').replace(/\)$/, '').split(',')) {
                 if (doc[i]) {
-                    this.parameters.push(new vscode.ParameterInformation(label, doc[i]));
+                    this.parameters.push(new vscode.ParameterInformation(label, doc[i] as string));
                 } else {
                     this.parameters.push(new vscode.ParameterInformation(label));
                 }
@@ -77,7 +78,7 @@ class StapSignatureHelpProvider implements vscode.SignatureHelpProvider {
         } else if (this.signature) {
             this.bracket++;
         }
-        this.signature = newSignature || this.signature;
+        this.signature = newSignature;
     }
 }
 
@@ -86,7 +87,6 @@ export default function setupSignatureHelp(context: vscode.ExtensionContext) {
         'systemtap',
         new StapSignatureHelpProvider(),
         { triggerCharacters: ['('], retriggerCharacters: [',', ')'] }
-        // '(', ','
     );
     context.subscriptions.push(signatureHelpProvider);
 }

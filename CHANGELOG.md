@@ -3,6 +3,7 @@
 ## v0.3.10
 
 - Fix syntax highlight of embedded C code. (See ([microsoft/vscode#64966](https://github.com/microsoft/vscode/issues/34525) & [atom/language-c#146](https://github.com/atom/language-c/issues/146)) for more information)
+- Build-in functions without argument will not show "None" as document.
 
 ## v0.3.9
 
