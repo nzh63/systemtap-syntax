@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import Syscall from './syscall';
 import Vfs from './vfs';
 import BuildinFunction from './buildinFunction';
-import Macro from './macro';
+import Macro from './macroLike';
 import Probe from './probe';
 
 let syscall: vscode.CompletionItem[] = [];

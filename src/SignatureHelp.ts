@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 
 import BuildinFunctionRaw from './doc/buildinFunction';
-import macroRaw from './doc/macro';
+import macroRaw from './doc/macroLike';
 
 class StapSignatureHelpProvider implements vscode.SignatureHelpProvider {
     signature: string | null = null;

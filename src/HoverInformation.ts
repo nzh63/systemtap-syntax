@@ -4,7 +4,7 @@ import BuildinFunctionRaw from './doc/buildinFunction';
 import ProbeRaw from './doc/probe';
 import syscallRaw from './doc/syscall';
 import vfsRaw from './doc/vfs';
-import macroRaw from './doc/macro';
+import macroRaw from './doc/macroLike';
 
 function provideHover(
 	document: vscode.TextDocument,

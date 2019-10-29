@@ -2,7 +2,8 @@
 
 ## v0.3.9
 
-- fix document of build-in function which has two or moresynopsis
+- Fix document of build-in function which has two or moresynopsis.
+- Macro won't show unneeded duplicate in auto completion list.
 
 ## v0.3.8
 
@@ -13,31 +14,31 @@
 ## v0.3.7
 
 - Fix highlighting bugs of funcion's retuen type.
-- Add macro
-- Change document format
+- Add macro.
+- Change document format.
 
 ## v0.3.6
 
-- Fix hover information
-- Fix document for `.return`
+- Fix hover information.
+- Fix document for `.return`.
 
 ## v0.3.5
 
-- Fix document
+- Fix document.
 
 ## v0.3.4
 
-- Add hover information
+- Add hover information.
 - Add input '.' to commit some auto completion word.
 
 ## v0.3.3
 
-- Document in more detail
+- Document in more detail.
 
 ## v0.3.2
 
-- Fix highlighting bugs of funcion declaration with space
-- Fix highlighting bugs of funcion declaration or probe declaration with comment
+- Fix highlighting bugs of funcion declaration with space.
+- Fix highlighting bugs of funcion declaration or probe declaration with comment.
 
 ## v0.3.1
 
@@ -45,17 +46,17 @@
 
 ## v0.3.0
 
-- Auto completion
-- Fix some highlighting bugs
+- Auto completion.
+- Fix some highlighting bugs.
 
 ## v0.2.0
 
-- Support embedded C
+- Support embedded C.
 
 ## v0.1.1
 
-- Fix bug while opening a C file
+- Fix bug while opening a C file.
 
 ## v0.1.0
 
-- Initial release
+- Initial release.

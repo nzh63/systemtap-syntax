@@ -23,6 +23,15 @@ function provideCompletionItems(
 	return [...keyword, ...buildinFunction, ...macro];
 }
 
+function provideCompletionItemsMacro(
+	document: vscode.TextDocument,
+	position: vscode.Position,
+	token: vscode.CancellationToken,
+	context: vscode.CompletionContext
+) {
+	if (context.triggerCharacter && context.triggerCharacter == '@')
+		return macro;
+}
 function provideCompletionItemsAfterProbe(
 	document: vscode.TextDocument,
 	position: vscode.Position,
@@ -133,7 +142,7 @@ function provideCompletionItemsAfterProbe(
 
 export default function setupAutoCompletion(context: vscode.ExtensionContext) {
     let autoCompletion = vscode.languages.registerCompletionItemProvider('systemtap', { provideCompletionItems });
-	let autoCompletionMacro = vscode.languages.registerCompletionItemProvider('systemtap', { provideCompletionItems: () => macro }, '@');
+	let autoCompletionMacro = vscode.languages.registerCompletionItemProvider('systemtap', { provideCompletionItems: provideCompletionItemsMacro}, '@');
 	let autoCompletionAfterProbe = vscode.languages.registerCompletionItemProvider('systemtap', { provideCompletionItems: provideCompletionItemsAfterProbe }, ' ', '.');
 	context.subscriptions.push(autoCompletion, autoCompletionMacro, autoCompletionAfterProbe);
 }
