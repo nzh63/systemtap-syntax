@@ -442,7 +442,7 @@
 					"end": "%}",
 					"patterns": [
 						{
-							"include": "source.c"
+							"include": "source.cpp"
 						}
 					]
 				}
