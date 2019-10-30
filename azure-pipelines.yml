@@ -1,0 +1,54 @@
+trigger:
+- master
+
+jobs:
+
+- job: 'Windows'
+  pool:
+    vmImage: 'vs2017-win2016'
+
+  steps:
+  - task: NodeTool@0
+    inputs:
+      versionSpec: '10.x'
+    displayName: 'Install Node.js'
+
+  - script: yarn install
+    displayName: "Install Dependencies"
+
+  - script: |
+      yarn run compile
+    displayName: 'Compile'
+
+  - script: |
+      yarn run test
+    displayName: 'Test'
+
+- job: 'Linux'
+  pool:
+    vmImage: 'ubuntu-18.04'
+
+  steps:
+  - task: NodeTool@0
+    inputs:
+      versionSpec: '10.x'
+    displayName: 'Install Node.js'
+
+  - script: yarn install
+    displayName: "Install Dependencies"
+
+  - script: |
+      yarn run compile
+    displayName: 'Compile'
+
+  - script: |
+      set -e
+      /usr/bin/Xvfb :10 -ac >> /tmp/Xvfb.out 2>&1 &
+      disown -ar
+    displayName: 'Start xvfb'
+
+  - script: |
+      yarn run test
+    displayName: 'Test'
+    env:
+      DISPLAY: :10
