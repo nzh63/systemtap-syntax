@@ -14,7 +14,7 @@ const otherProbeKey = Object.keys(otherProbe).map(i => {
 	return j;
 });
 
-function provideCompletionItems(
+export function provideCompletionItems(
 	document: vscode.TextDocument,
 	position: vscode.Position,
 	token: vscode.CancellationToken,
@@ -23,7 +23,7 @@ function provideCompletionItems(
 	return [...keyword, ...buildinFunction, ...macro];
 }
 
-function provideCompletionItemsMacro(
+export function provideCompletionItemsMacro(
 	document: vscode.TextDocument,
 	position: vscode.Position,
 	token: vscode.CancellationToken,
@@ -32,7 +32,7 @@ function provideCompletionItemsMacro(
 	if (context.triggerCharacter && context.triggerCharacter == '@')
 		return macro;
 }
-function provideCompletionItemsAfterProbe(
+export function provideCompletionItemsAfterProbe(
 	document: vscode.TextDocument,
 	position: vscode.Position,
 	token: vscode.CancellationToken,

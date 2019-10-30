@@ -3,13 +3,13 @@ import * as vscode from 'vscode';
 import BuildinFunctionRaw from './doc/buildinFunction';
 import macroRaw from './doc/macroLike';
 
-class StapSignatureHelpProvider implements vscode.SignatureHelpProvider {
-    signature: string | null = null;
-    description: string | null = null;
-    parameters: vscode.ParameterInformation[] = []
-    activeParameter = 0;
-    maxParameter = 0;
-    bracket = 0;
+export class StapSignatureHelpProvider implements vscode.SignatureHelpProvider {
+    private signature: string | null = null;
+    private description: string | null = null;
+    private parameters: vscode.ParameterInformation[] = []
+    private activeParameter = 0;
+    private maxParameter = 0;
+    private bracket = 0;
     public provideSignatureHelp(
         document: vscode.TextDocument,
         position: vscode.Position,
@@ -70,9 +70,9 @@ class StapSignatureHelpProvider implements vscode.SignatureHelpProvider {
             this.parameters = [];
             let i = 0;
             for (const label of newSignature.replace(/^.*\(/, '').replace(/\)$/, '').split(',')) {
-                if (doc[i]) {
+                if (label && doc[i]) {
                     this.parameters.push(new vscode.ParameterInformation(label, (doc[i] as string).trim()));
-                } else {
+                } else if (label) {
                     this.parameters.push(new vscode.ParameterInformation(label));
                 }
                 i++;

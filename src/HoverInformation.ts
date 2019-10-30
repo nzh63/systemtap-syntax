@@ -6,7 +6,7 @@ import syscallRaw from './doc/syscall';
 import vfsRaw from './doc/vfs';
 import macroRaw from './doc/macroLike';
 
-function provideHover(
+export function provideHover(
 	document: vscode.TextDocument,
 	position: vscode.Position,
 	token: vscode.CancellationToken
@@ -35,6 +35,6 @@ function provideHover(
 }
 
 export default function setupHoverInformation(context: vscode.ExtensionContext) {
-    let hoverProvider = vscode.languages.registerHoverProvider('systemtap', { provideHover });
+	let hoverProvider = vscode.languages.registerHoverProvider('systemtap', { provideHover });
 	context.subscriptions.push(hoverProvider);
 }

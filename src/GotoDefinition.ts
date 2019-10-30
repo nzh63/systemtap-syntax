@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 
-function provideDefinition(
+export function provideDefinition(
     document: vscode.TextDocument,
     position: vscode.Position,
     token: vscode.CancellationToken
