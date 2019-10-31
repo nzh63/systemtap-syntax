@@ -1,4 +1,5 @@
 # SystemTap
+[![Build Status](https://dev.azure.com/nzh21/nzh21/_apis/build/status/nzh63.systemtap-syntax?branchName=master)](https://dev.azure.com/nzh21/nzh21/_build/latest?definitionId=1&branchName=master)
 
 This package adds language support for SystemTap script.
 
@@ -8,6 +9,7 @@ This package adds language support for SystemTap script.
 - Auto completion
 - Show document when you hover in a build-in function or a probe name
 - Signature help for build-in function
+- Goto definition
 
 ## Known issues
 
