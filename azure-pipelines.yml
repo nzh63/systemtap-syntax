@@ -24,6 +24,10 @@ jobs:
     displayName: "Install Dependencies"
 
   - script: |
+      yarn run lint
+    displayName: 'Lint'
+
+  - script: |
       yarn run compile
     displayName: 'Compile'
 

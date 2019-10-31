@@ -1,15 +1,12 @@
 import * as assert from 'assert';
 
 import * as vscode from 'vscode';
-import * as HoverInformation from '../../HoverInformation';
-
-let token: vscode.CancellationToken = { isCancellationRequested: false, onCancellationRequested: () => new vscode.Disposable(() => { }) };
 
 suite('Hover Information', () => {
     let documentT = vscode.workspace.openTextDocument({
         language: 'systemtap',
         content:
-`probe kprocess.exec { printtask("kprocess.exec") }
+            `probe kprocess.exec { printtask("kprocess.exec") }
 probe syscall.exit { printtask("syscall.exit") }
 function printtask(name) {
     t = pid2task(pid())
@@ -19,24 +16,28 @@ function printtask(name) {
 `
     });
 
-    test('Probe name', async () => {
+    async function check(position: vscode.Position, hasInfo: boolean = true) {
         let document = await documentT;
         await vscode.window.showTextDocument(document);
-        assert.notEqual(undefined, HoverInformation.provideHover(document, new vscode.Position(0, 12), token));
-        assert.notEqual(undefined, HoverInformation.provideHover(document, new vscode.Position(0, 18), token));
-        assert.notEqual(undefined, HoverInformation.provideHover(document, new vscode.Position(1, 12), token));
-        assert.notEqual(undefined, HoverInformation.provideHover(document, new vscode.Position(1, 18), token));
+        let infoList  = await vscode.commands.executeCommand(
+            'vscode.executeHoverProvider',
+            document.uri,
+            position) as vscode.Hover[];
+            assert.ok(hasInfo !== (infoList.length === 0));
+    }
+
+    test('Probe name', async () => {
+        await check(new vscode.Position(0, 12));
+        await check(new vscode.Position(0, 18));
+        await check(new vscode.Position(1, 12));
+        await check(new vscode.Position(1, 18));
     });
     test('build-in fuiction', async () => {
-        let document = await documentT;
-        await vscode.window.showTextDocument(document);
-        assert.notEqual(undefined, HoverInformation.provideHover(document, new vscode.Position(3, 12), token));
-        assert.notEqual(undefined, HoverInformation.provideHover(document, new vscode.Position(3, 19), token));
+        await check(new vscode.Position(3, 12));
+        await check(new vscode.Position(3, 19));
     });
     test('Space', async () => {
-        let document = await documentT;
-        await vscode.window.showTextDocument(document);
-        assert.equal(undefined, HoverInformation.provideHover(document, new vscode.Position(3, 0), token));
-        assert.equal(undefined, HoverInformation.provideHover(document, new vscode.Position(5, 16), token));
+        await check(new vscode.Position(3, 0), false);
+        await check(new vscode.Position(5, 16), false);
     });
 });

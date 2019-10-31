@@ -1,9 +1,6 @@
 import * as assert from 'assert';
 
 import * as vscode from 'vscode';
-import * as GotoDefinition from '../../GotoDefinition';
-
-let token: vscode.CancellationToken = { isCancellationRequested: false, onCancellationRequested: () => new vscode.Disposable(() => { }) };
 
 suite('Goto Definition', () => {
     let documentT = vscode.workspace.openTextDocument({
@@ -32,30 +29,29 @@ function xxx(bb:string) {
 `
     });
 
-    function check(document: vscode.TextDocument, x: number, y: number, x0: number, y0: number) {
-        let pos = GotoDefinition.provideDefinition(document, new vscode.Position(x, y), token);
+    async function check(document: vscode.TextDocument, x: number, y: number, x0: number, y0: number) {
+        let pos: vscode.Location[] = await vscode.commands.executeCommand('vscode.executeDefinitionProvider', document.uri, new vscode.Position(x, y)) as vscode.Location[];
         assert.notEqual(undefined, pos[0]);
-        assert.equal(x0, pos[0].range.start.line);
-        assert.equal(y0, pos[0].range.start.character);
+        assert.ok(pos.some(i => i.range.start.line == x0 && i.range.start.character == y0));
     }
 
     test('Ver name', async () => {
         let document = await documentT;
         await vscode.window.showTextDocument(document);
 
-        check(document, 9, 5, 0, 7);
-        check(document, 10, 5, 1, 8);
-        check(document, 11, 5, 2, 18);
-        check(document, 12, 5, 6, 7);
-        check(document, 13, 5, 4, 7);
-        check(document, 14, 5, 5, 7);
-        check(document, 15, 5, 7, 7);
+        await check(document, 9, 5, 0, 7);
+        await check(document, 10, 5, 1, 8);
+        await check(document, 11, 5, 2, 18);
+        await check(document, 12, 5, 6, 7);
+        await check(document, 13, 5, 4, 7);
+        await check(document, 14, 5, 5, 7);
+        await check(document, 15, 5, 7, 7);
     });
 
     test('Function name', async () => {
         let document = await documentT;
         await vscode.window.showTextDocument(document);
 
-        check(document, 18, 14, 8, 9);
+        await check(document, 18, 14, 8, 9);
     });
 });
