@@ -1,7 +1,9 @@
 # SystemTap
-[![Build Status](https://dev.azure.com/nzh21/nzh21/_apis/build/status/nzh63.systemtap-syntax?branchName=master)](https://dev.azure.com/nzh21/nzh21/_build/latest?definitionId=1&branchName=master)
+[![Build Status](https://dev.azure.com/nzh21/systemtap-syntax/_apis/build/status/nzh63.systemtap-syntax?branchName=master)](https://dev.azure.com/nzh21/systemtap-syntax/_build/latest?definitionId=1&branchName=master)
 
 This package adds language support for SystemTap script.
+
+![example](https://i.loli.net/2019/11/02/2WUkRMAx7ubHz6o.gif)
 
 ## Features
 
