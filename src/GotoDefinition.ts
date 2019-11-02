@@ -1,10 +1,26 @@
 import * as vscode from 'vscode';
 
+
 export function provideDefinition(
     document: vscode.TextDocument,
     position: vscode.Position,
     token: vscode.CancellationToken
 ): vscode.Location[] {
+    let definition = findInGlobal(document, position, token);
+    if (!definition) {
+        definition = findInLocal(document, position, token);
+    }
+    if (definition)
+        return [definition];
+    else
+        return [];
+}
+
+export function findInGlobal(
+    document: vscode.TextDocument,
+    position: vscode.Position,
+    token: vscode.CancellationToken
+): vscode.Location | void {
     const word = document.getText(document.getWordRangeAtPosition(position, /[@a-zA-Z0-9_$]+/));
     const lineCount = document.lineCount;
     enum State { findKeyword, findSpace, findComma, findName, done };
@@ -12,7 +28,7 @@ export function provideDefinition(
     let definitionPosition;
     let keyword = null;
     let line: string | null = null;
-    for (let i = -1; i < lineCount;) {
+    for (let i = -1; i < lineCount - 1;) {
         if (line == null || line == '') {
             i++;
             line = document.lineAt(i).text;
@@ -74,9 +90,35 @@ export function provideDefinition(
         }
     }
     if (definitionPosition)
-        return [new vscode.Location(document.uri, definitionPosition)];
-    else
-        return [];
+        return new vscode.Location(document.uri, definitionPosition);
+}
+
+export function findInLocal(
+    document: vscode.TextDocument,
+    position: vscode.Position,
+    token: vscode.CancellationToken
+): vscode.Location | void {
+    const word = document.getText(document.getWordRangeAtPosition(position, /[@a-zA-Z0-9_$]+/));
+    let lineNumber = position.line;
+    let line = document.lineAt(lineNumber).text.substr(0, position.character);
+    let definition: vscode.Position | void = undefined;
+    let inLocal = true;
+    while (inLocal) {
+        console.log(line);
+        if (/function|probe/.test(line)) {
+            inLocal = false;
+            line = line.substr(line.lastIndexOf('function'));
+        }
+        let match: string | null = (line.match(RegExp(word + '\\s*=')) || [null])[0];
+        if (match) {
+            definition = new vscode.Position(lineNumber, line.indexOf(match));
+        }
+        lineNumber--;
+        if (lineNumber >= 0) line = document.lineAt(lineNumber).text;
+        else inLocal = false;
+    }
+    if (definition)
+        return new vscode.Location(document.uri, definition);
 }
 
 export default function setupGotoDefinition(context: vscode.ExtensionContext) {

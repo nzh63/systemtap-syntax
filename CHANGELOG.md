@@ -1,5 +1,9 @@
 # Change Log
 
+## v0.4.1
+
+- Goto definition can find local variable now.
+
 ## v0.4.0
 
 - Add goto definition.

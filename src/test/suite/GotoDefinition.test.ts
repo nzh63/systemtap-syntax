@@ -26,6 +26,17 @@ function aaa:long(bbb:string) {
 function xxx(bb:string) {
     return aaa()
 }
+function a() {
+    myname = 5
+    print(myname)
+}
+probe begin {
+    myname = 5
+    print(myname)
+    for (i = 0; i < 6; i++) {
+        print(i)
+    }
+}
 `
     });
 
@@ -35,7 +46,7 @@ function xxx(bb:string) {
         assert.ok(pos.some(i => i.range.start.line == x0 && i.range.start.character == y0));
     }
 
-    test('Ver name', async () => {
+    test('Ver name - global', async () => {
         let document = await documentT;
         await vscode.window.showTextDocument(document);
 
@@ -46,6 +57,15 @@ function xxx(bb:string) {
         await check(document, 13, 5, 4, 7);
         await check(document, 14, 5, 5, 7);
         await check(document, 15, 5, 7, 7);
+    });
+
+    test('Ver name - local', async () => {
+        let document = await documentT;
+        await vscode.window.showTextDocument(document);
+
+        await check(document, 22, 10, 21, 4);
+        await check(document, 26, 13, 25, 4);
+        await check(document, 28, 14, 27, 9);
     });
 
     test('Function name', async () => {
