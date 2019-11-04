@@ -104,12 +104,11 @@ export function findInLocal(
     let definition: vscode.Position | void = undefined;
     let inLocal = true;
     while (inLocal) {
-        console.log(line);
         if (/function|probe/.test(line)) {
             inLocal = false;
-            line = line.substr(line.lastIndexOf('function'));
+			line = line.substr(Math.max(0, line.lastIndexOf('function'), line.lastIndexOf('probe')));
         }
-        let match: string | null = (line.match(RegExp(word + '\\s*=')) || [null])[0];
+        let match = (line.match(RegExp(word + '\\s*=')) || [null])[0];
         if (match) {
             definition = new vscode.Position(lineNumber, line.indexOf(match));
         }
