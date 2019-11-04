@@ -37,6 +37,7 @@ export function provideCompletionItemsInLocal(
 	let line = document.lineAt(lineNumber).text.substr(0, position.character);
 	let completion: vscode.CompletionItem[] = [];
 	let inLocal = true;
+	let added: {[index:string]: boolean} = {};
 	while (inLocal) {
 		if (/function|probe/.test(line)) {
 			inLocal = false;
@@ -58,6 +59,8 @@ export function provideCompletionItemsInLocal(
 	return completion;
 
 	function addItem(name: string, detail?: string, doc?: string, type = vscode.CompletionItemKind.Variable) {
+		if (added[name]) return;
+		added[name] = true;
 		let c = new vscode.CompletionItem(name);
 		c.kind = type;
 		if (detail) c.detail = detail;

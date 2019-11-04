@@ -1,5 +1,9 @@
 # Change Log
 
+## v0.4.2
+
+- Remove duplicate in auto completion list.
+
 ## v0.4.1
 
 - Goto definition can find local variables now.
