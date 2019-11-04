@@ -11,7 +11,7 @@ suite('Auto Completion', () => {
         documentContent: string,
         position: vscode.Position,
         list: string[],
-        triggerCharacter: string,
+        triggerCharacter?: string,
         hasDocument: boolean = false
     ): Promise<void> {
         let document = await documentThenable;
@@ -55,7 +55,7 @@ suite('Auto Completion', () => {
         await AutoCompletionAssert(
             'probe tcp.',
             new vscode.Position(0, 10),
-            ['receive', 'exit', 'recvmsg'],
+            ['receive', 'setsockopt', 'recvmsg'],
             '.',
             true);
     });
