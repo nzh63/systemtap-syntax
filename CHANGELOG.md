@@ -2,7 +2,8 @@
 
 ## v0.4.1
 
-- Goto definition can find local variable now.
+- Goto definition can find local variables now.
+- Auto completion can provide local variables, function arguments and probe values as suggestions.
 
 ## v0.4.0
 

@@ -141,4 +141,27 @@ suite('Auto Completion', () => {
             ['s', 'ms', 'hz', 'jiffies'],
             '.');
     });
+
+    test('Local variables', async () => {
+        await AutoCompletionAssert(
+            'function foo:string() {\n    b = 0\n    bar = 1\n    baz = 2\n    b',
+            new vscode.Position(4, 6),
+            ['b', 'bar', 'baz']);
+    });
+
+    test('Function arguments', async () => {
+        await AutoCompletionAssert(
+            'function foo:string(bar, baz:long) { \n    ba',
+            new vscode.Position(1, 6),
+            ['bar', 'baz']);
+    });
+
+    test('Probe values', async () => {
+        await AutoCompletionAssert(
+            'probe scheduler.process_fork {\n    ch',
+            new vscode.Position(1, 6),
+            ['child_pid'],
+            undefined,
+            true);
+    });
 });
