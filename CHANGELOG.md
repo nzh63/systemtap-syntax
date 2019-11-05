@@ -3,6 +3,8 @@
 ## v0.4.2
 
 - Remove duplicate in auto completion list.
+- Add global variables and function name to auto completion list.
+- Goto definition can find function arguments now.
 
 ## v0.4.1
 

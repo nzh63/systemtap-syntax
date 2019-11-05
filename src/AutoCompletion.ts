@@ -1,10 +1,7 @@
 import * as vscode from 'vscode';
 
 import { syscallAction, vfsAction, buildinFunction, probe as otherProbe, macro } from './doc';
-import ProbeRaw from './doc/probe';
-import syscallRaw from './doc/syscall';
-import vfsRaw from './doc/vfs';
-
+import { findLocalVariableListBefore, findGlobalLabel } from './Syntax';
 const keyword = ['global', 'function', 'probe', 'while', 'for', 'foreach', 'in', 'limit', 'for', 'break', 'continue', 'return', 'next', 'delete', 'try', 'catch']
 	.map(i => {
 		let j = new vscode.CompletionItem(i);
@@ -32,87 +29,33 @@ export function provideCompletionItemsInLocal(
 	position: vscode.Position,
 	token: vscode.CancellationToken,
 	context: vscode.CompletionContext
-) {
-	let lineNumber = position.line;
-	let line = document.lineAt(lineNumber).text.substr(0, position.character);
-	let completion: vscode.CompletionItem[] = [];
-	let inLocal = true;
-	let added: {[index:string]: boolean} = {};
-	while (inLocal) {
-		if (/function|probe/.test(line)) {
-			inLocal = false;
-			line = line.substr(Math.max(0, line.lastIndexOf('function'), line.lastIndexOf('probe')));
-			processeFunctionArgumentsList();	// function
-			processeProbeValuesList();		// probe
-		}
-		let match = (line.match(/([a-zA-Z0-9_$]+)\s*=/) || [null, null])[1];
-		if (match) {
-			addItem(match);
-			line = line.substr(0, line.lastIndexOf(match));
-		} else {
-			lineNumber--;
-			line = '';
-		}
-		if (lineNumber >= 0 && line === '') line = document.lineAt(lineNumber).text;
-		else if (line === '') inLocal = false;
-	}
-	return completion;
-
-	function addItem(name: string, detail?: string, doc?: string, type = vscode.CompletionItemKind.Variable) {
-		if (added[name]) return;
-		added[name] = true;
-		let c = new vscode.CompletionItem(name);
-		c.kind = type;
-		if (detail) c.detail = detail;
-		if (doc) c.documentation = new vscode.MarkdownString(doc);
-		completion.push(c);
-	}
-
-	function processeFunctionArgumentsList() {
-		let argumentsList = (line.match(/^function.*?\((.+?)\)/) || [null, null])[1];
-		if (argumentsList) {
-			let argument = argumentsList.split(',').map(s => (s.match(/(\S*)\s*:\s*(\S*)/) || [s, s, undefined]) as [string, string, string | undefined]);
-			for (const i of argument) {
-				addItem(i[1], i[2]);
-			}
+): vscode.CompletionItem[] {
+	const variables = findLocalVariableListBefore(document, position);
+    const globalLabels = findGlobalLabel(document);
+	let completions: vscode.CompletionItem[] = [];
+	let added: { [index: string]: boolean } = {};
+	for (const i of variables) {
+		if (!added[i.name]) {
+			added[i.name] = true;
+			let completionItem = new vscode.CompletionItem(i.name);
+			completionItem.kind = vscode.CompletionItemKind.Variable;
+			if (i.type) completionItem.detail = i.type;
+			if (i.document) completionItem.documentation = i.document;
+			completions.push(completionItem);
 		}
 	}
-
-	function processeProbeValuesList() {
-		let probeName = (line.match(/^probe(?:\s+|\/\*.*?\*\/)([a-zA-Z._]+)/) || [null, null])[1];
-		if (probeName) {
-			let rawDoc = ProbeRaw.filter(i => i.name === probeName);
-			if (rawDoc[0]) {
-				let match = (rawDoc[0].doc.match(/\*\*Values\*\*\s*([\S\s]*)(?!\*\*)/) || [null, null])[1];
-				if (match) {
-					let values = match.split('\n');
-					for (let i of values) {
-						i = i.trim();
-						let [, valueName, valueDoc] = (i.match(/^`(.*?)`(.*?)$/) || [undefined, undefined, undefined]);
-						if (valueName) {
-							addItem(valueName, '', valueDoc);
-						}
-					}
-				}
-			}
-			rawDoc = syscallRaw.filter(i => 'syscall.' + i.name === probeName);
-			rawDoc = [...rawDoc, ...vfsRaw.filter(i => 'vfs.' + i.name === probeName)];
-			if (rawDoc.length) {
-				let values = rawDoc[0].doc.split(' ');
-				for (let i = 0; i < values.length; i++) {
-					values[i] = values[i].trim();
-					let [, valueName, valueDetail] = (values[i].match(/^(.*?):(.*?)$/) || [undefined, undefined, undefined]);
-					if (valueDetail === 'struct') {
-						i++;
-						valueDetail += ' ' + values[i].trim();
-					}
-					if (valueName) {
-						addItem(valueName, valueDetail);
-					}
-				}
-			}
+	for (const i of globalLabels) {
+		if (!added[i.name]) {
+			added[i.name] = true;
+			let completionItem = new vscode.CompletionItem(i.name);
+			completionItem.kind = vscode.CompletionItemKind.Variable;
+			if (i.kind === 'Function') completionItem.kind = vscode.CompletionItemKind.Function;
+			else if (i.kind === 'GlobalVariable') completionItem.kind = vscode.CompletionItemKind.Variable;
+			if (i.document) completionItem.documentation = i.document;
+			completions.push(completionItem);
 		}
 	}
+	return completions;
 }
 
 export function provideCompletionItemsMacro(
@@ -120,7 +63,7 @@ export function provideCompletionItemsMacro(
 	position: vscode.Position,
 	token: vscode.CancellationToken,
 	context: vscode.CompletionContext
-) {
+): vscode.CompletionItem[] | undefined {
 	if (context.triggerCharacter && context.triggerCharacter == '@')
 		return macro;
 }
@@ -129,7 +72,7 @@ export function provideCompletionItemsAfterProbe(
 	position: vscode.Position,
 	token: vscode.CancellationToken,
 	context: vscode.CompletionContext
-) {
+): vscode.CompletionItem[] {
 	let input = document.lineAt(position).text.substring(0, position.character);
 
 	let afterProbe: vscode.CompletionItem[] = [];

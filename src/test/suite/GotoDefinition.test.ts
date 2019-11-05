@@ -23,7 +23,9 @@ function aaa:long(bbb:string) {
     queued_time = 8
     pid_state = 2
 }
-function xxx(bb:string) {
+function xxx(bb:string, ccc) {
+    bb = 6
+    ccc = 0
     return aaa()
 }
 function a() {
@@ -63,15 +65,23 @@ probe begin {
         let document = await documentT;
         await vscode.window.showTextDocument(document);
 
-        await check(document, 22, 10, 21, 4);
-        await check(document, 26, 13, 25, 4);
-        await check(document, 28, 14, 27, 9);
+        await check(document, 24, 10, 23, 4);
+        await check(document, 28, 13, 27, 4);
+        await check(document, 30, 14, 29, 9);
     });
 
     test('Function name', async () => {
         let document = await documentT;
         await vscode.window.showTextDocument(document);
 
-        await check(document, 18, 14, 8, 9);
+        await check(document, 20, 14, 8, 9);
+    });
+
+    test('Function arguments', async () => {
+        let document = await documentT;
+        await vscode.window.showTextDocument(document);
+
+        await check(document, 18, 5, 17, 13);
+        await check(document, 19, 5, 17, 24);
     });
 });

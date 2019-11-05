@@ -164,4 +164,18 @@ suite('Auto Completion', () => {
             undefined,
             true);
     });
+
+    test('Global variables', async () => {
+        await AutoCompletionAssert(
+            'global foo = 1,\n   bar = 3,baz\n    ,b\n\n function main() { b',
+            new vscode.Position(4, 20),
+            ['b', 'bar', 'baz']);
+    });
+
+    test('Function name', async () => {
+        await AutoCompletionAssert(
+            'function foo:string(bar, baz:long) { }\nfunction bar:string(bar, baz:long) { }\nfunction main() {\nf',
+            new vscode.Position(3, 1),
+            ['foo']);
+    });
 });
