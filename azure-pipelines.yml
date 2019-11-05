@@ -43,25 +43,3 @@ jobs:
     displayName: 'Test'
     env:
       DISPLAY: :10
-
-- job: 'Release'
-  dependsOn: 'Build'
-  condition: and(and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags')), eq(variables['Agent.OS'], 'Linux'))
-
-  steps:
-  - script: |
-      yarn package
-    displayName: "Package VSIX"
-
-  - task: GithubRelease@0
-    displayName: 'Create Github Release'
-    inputs:
-      gitHubConnection: nzh21
-      repositoryName: nzh63/systemtap-syntax
-      assets:  $(Build.ArtifactStagingDirectory)/*.vsix
-
-  - script: |
-      npx vsce publish -p $TOKEN
-    displayName: "Publish to Visual Studio Code Market"
-    env:
-      TOKEN: $(VSCODE_MARKETPLACE_TOKEN)
