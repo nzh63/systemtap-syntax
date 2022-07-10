@@ -43,3 +43,9 @@ jobs:
     displayName: 'Test'
     env:
       DISPLAY: :10
+
+  - script: |
+      yarn run test-web
+    displayName: 'Test in web'
+    env:
+      DISPLAY: :10

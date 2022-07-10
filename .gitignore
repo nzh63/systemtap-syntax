@@ -1,4 +1,6 @@
 out
+out-web
 node_modules
 .vscode-test/
+.vscode-test-web/
 *.vsix

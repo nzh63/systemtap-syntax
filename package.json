@@ -10,7 +10,7 @@
 		"url": "git@github.com:nzh63/systemtap-syntax.git"
 	},
 	"engines": {
-		"vscode": "^1.39.0"
+		"vscode": "^1.60.0"
 	},
 	"categories": [
 		"Programming Languages"
@@ -19,6 +19,7 @@
 		"onLanguage:systemtap"
 	],
 	"main": "./out/extension.js",
+	"browser": "./out-web/extension.js",
 	"contributes": {
 		"languages": [
 			{
@@ -48,26 +49,37 @@
 		]
 	},
 	"scripts": {
-		"vscode:prepublish": "yarn run compile",
+		"vscode:prepublish": "npm run package-web",
 		"compile": "tsc -p ./",
 		"lint": "eslint ./src --ext .js,.ts && tsc --noEmit",
 		"watch": "tsc -watch -p ./",
 		"package": "yarn run compile && vsce package --yarn",
 		"pretest": "yarn run compile",
-		"test": "node ./out/test/runTest.js"
+		"test": "node ./out/test/runTest.js",
+		"compile-web": "webpack",
+		"watch-web": "webpack --watch",
+		"package-web": "webpack --mode production --devtool hidden-source-map",
+		"test-web": "yarn compile-web && vscode-test-web --extensionDevelopmentPath=. --extensionTestsPath=out-web/test/suite/index.js"
 	},
 	"devDependencies": {
 		"@types/glob": "^7.1.1",
 		"@types/mocha": "^5.2.6",
-		"@types/node": "^10.12.21",
-		"@types/vscode": "^1.39.0",
-		"@typescript-eslint/eslint-plugin": "^2.4.0",
-		"@typescript-eslint/parser": "^2.4.0",
-		"eslint": "^6.5.1",
+		"@types/node": "^14.0.0",
+		"@types/vscode": "^1.60.0",
+		"@types/webpack-env": "^1.16.0",
+		"@typescript-eslint/eslint-plugin": "^5.27.1",
+		"@typescript-eslint/parser": "^5.27.1",
+		"@vscode/test-web": "^0.0.27",
+		"assert": "^2.0.0",
+		"eslint": "^8.17.0",
 		"glob": "^7.1.4",
-		"mocha": "^6.1.4",
-		"typescript": "^3.3.1",
-		"vsce": "^1.68.0",
-		"vscode-test": "^1.2.0"
+		"mocha": "^10.0.0",
+		"process": "^0.11.10",
+		"ts-loader": "^9.2.2",
+		"typescript": "^4.7.0",
+		"vsce": "^2.9.2",
+		"vscode-test": "^1.2.0",
+		"webpack": "^5.38.1",
+		"webpack-cli": "^4.7.0"
 	}
 }
