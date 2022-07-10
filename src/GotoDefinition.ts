@@ -49,6 +49,6 @@ export function findInLocal(
 }
 
 export default function setupGotoDefinition(context: vscode.ExtensionContext) {
-    let hoverProvider = vscode.languages.registerDefinitionProvider('systemtap', { provideDefinition });
+    const hoverProvider = vscode.languages.registerDefinitionProvider('systemtap', { provideDefinition });
     context.subscriptions.push(hoverProvider);
 }

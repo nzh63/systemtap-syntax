@@ -3,7 +3,7 @@ import * as assert from 'assert';
 import * as vscode from 'vscode';
 
 suite('Signature Help', () => {
-    let documentT = vscode.workspace.openTextDocument({
+    const documentT = vscode.workspace.openTextDocument({
         language: 'systemtap',
         content: ''
     });
@@ -24,7 +24,7 @@ suite('Signature Help', () => {
     }
 
     test('None arg', async () => {
-        let document = await documentT;
+        const document = await documentT;
         await vscode.window.showTextDocument(document);
 
         let edit = new vscode.WorkspaceEdit();
@@ -43,7 +43,7 @@ suite('Signature Help', () => {
     });
 
     test('One args', async () => {
-        let document = await documentT;
+        const document = await documentT;
         await vscode.window.showTextDocument(document);
 
         let edit = new vscode.WorkspaceEdit();
@@ -63,7 +63,7 @@ suite('Signature Help', () => {
     });
 
     test('Two args', async () => {
-        let document = await documentT;
+        const document = await documentT;
         await vscode.window.showTextDocument(document);
 
         let edit = new vscode.WorkspaceEdit();

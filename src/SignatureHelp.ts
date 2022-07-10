@@ -6,7 +6,7 @@ import macroRaw from './doc/macroLike';
 export class StapSignatureHelpProvider implements vscode.SignatureHelpProvider {
     private signature: string | null = null;
     private description: string | null = null;
-    private parameters: vscode.ParameterInformation[] = []
+    private parameters: vscode.ParameterInformation[] = [];
     private activeParameter = 0;
     private maxParameter = 0;
     private bracket = 0;
@@ -15,7 +15,7 @@ export class StapSignatureHelpProvider implements vscode.SignatureHelpProvider {
         position: vscode.Position,
         token: vscode.CancellationToken
     ): vscode.SignatureHelp | undefined {
-        let lastChar = document.lineAt(position).text.substring(position.character - 1, position.character);
+        const lastChar = document.lineAt(position).text.substring(position.character - 1, position.character);
 
         if (lastChar === '(') this.flashSignature(document, position, token);
         else if (lastChar == ')' && this.bracket === 0) this.signature = null;
@@ -24,10 +24,10 @@ export class StapSignatureHelpProvider implements vscode.SignatureHelpProvider {
 
         if (this.signature === null) return;
 
-        let signatureHelp = new vscode.SignatureHelp();
+        const signatureHelp = new vscode.SignatureHelp();
         signatureHelp.activeSignature = 0;
         signatureHelp.activeParameter = this.activeParameter;
-        let signatureInformation = new vscode.SignatureInformation(this.signature);
+        const signatureInformation = new vscode.SignatureInformation(this.signature);
         signatureInformation.parameters = this.parameters;
         if (this.description) signatureInformation.documentation = this.description;
         signatureHelp.signatures = [signatureInformation];
@@ -44,18 +44,18 @@ export class StapSignatureHelpProvider implements vscode.SignatureHelpProvider {
             line--;
             input = document.lineAt(line).text;
         }
-        let word = (input.match(/([@a-zA-Z0-9_$\.]+)\s*$/) || [null, null])[1];
+        const word = (input.match(/([@a-zA-Z0-9_$\.]+)\s*$/) || [null, null])[1];
         if (word == null) return;
 
         let newSignature = null;
         let newDoc = null;
-        let macroDoc = macroRaw.filter(i => i.name === word);
+        const macroDoc = macroRaw.filter(i => i.name === word);
         if (macroDoc.length && macroDoc[0].doc) {
             newSignature = (macroDoc[0].doc.match(/\*\*Synopsis\*\*[\s\n]*```([\S\s\n]*?)```/) || [null, null])[1];
             newDoc = macroDoc[0].doc;
         }
 
-        let functionDoc = BuildinFunctionRaw.filter(i => i.name === word);
+        const functionDoc = BuildinFunctionRaw.filter(i => i.name === word);
         if (functionDoc.length) {
             newSignature = (functionDoc[0].doc.match(/\*\*Synopsis\*\*[\s\n]*```([\S\s\n]*?)```/) || [null, null])[1];
             newDoc = functionDoc[0].doc;
@@ -64,8 +64,8 @@ export class StapSignatureHelpProvider implements vscode.SignatureHelpProvider {
         if (newSignature) {
             description = ((newDoc || '').match(/\*\*Description\*\*[\s\n]*([\S\s\n]*?)(?=\*\*|$)/) || [null, null])[1];
             if (description) description = description.trim();
-            let argDoc = ((newDoc || '').match(/\*\*Arguments\*\*[\s\n]*([\S\s\n]*?)(?=\*\*|$)/) || [null, null])[1];
-            let doc = (argDoc || '').trim().split('\n\n').map(s => (s.match(/^`.*?`(.*)$/) || [null, null])[1]);
+            const argDoc = ((newDoc || '').match(/\*\*Arguments\*\*[\s\n]*([\S\s\n]*?)(?=\*\*|$)/) || [null, null])[1];
+            const doc = (argDoc || '').trim().split('\n\n').map(s => (s.match(/^`.*?`(.*)$/) || [null, null])[1]);
             newSignature = newSignature.trim();
             this.parameters = [];
             let i = 0;
@@ -89,7 +89,7 @@ export class StapSignatureHelpProvider implements vscode.SignatureHelpProvider {
 }
 
 export default function setupSignatureHelp(context: vscode.ExtensionContext) {
-    let signatureHelpProvider = vscode.languages.registerSignatureHelpProvider(
+    const signatureHelpProvider = vscode.languages.registerSignatureHelpProvider(
         'systemtap',
         new StapSignatureHelpProvider(),
         { triggerCharacters: ['('], retriggerCharacters: [',', ')'] }

@@ -3,7 +3,7 @@ import * as assert from 'assert';
 import * as vscode from 'vscode';
 
 suite('Auto Completion', () => {
-    let documentThenable = vscode.workspace.openTextDocument({
+    const documentThenable = vscode.workspace.openTextDocument({
         language: 'systemtap',
         content: ''
     });
@@ -14,13 +14,13 @@ suite('Auto Completion', () => {
         triggerCharacter?: string,
         hasDocument: boolean = false
     ): Promise<void> {
-        let document = await documentThenable;
+        const document = await documentThenable;
         await vscode.window.showTextDocument(document);
-        let edit = new vscode.WorkspaceEdit();
+        const edit = new vscode.WorkspaceEdit();
         edit.replace(document.uri, new vscode.Range(0, 0, document.lineCount, 0), documentContent);
         await vscode.workspace.applyEdit(edit);
 
-        let { items: completion } = await vscode.commands.executeCommand(
+        const { items: completion } = await vscode.commands.executeCommand(
             'vscode.executeCompletionItemProvider',
             document.uri,
             position,

@@ -24,7 +24,7 @@ export function findLocalVariableListBefore(
 ): VariableInformation[] {
     let lineNumber = position.line;
     let line = document.lineAt(lineNumber).text.substr(0, position.character);
-    let variables: VariableInformation[] = [];
+    const variables: VariableInformation[] = [];
     let inLocal = true;
     while (inLocal) {
         if (/function|probe/.test(line)) {
@@ -32,7 +32,7 @@ export function findLocalVariableListBefore(
             line = line.substr(Math.max(0, line.lastIndexOf('function'), line.lastIndexOf('probe')));
 
         }
-        let match = (line.match(/([a-zA-Z0-9_$]+)\s*=[^=]*$/) || [null, null])[1];
+        const match = (line.match(/([a-zA-Z0-9_$]+)\s*=[^=]*$/) || [null, null])[1];
         if (match) {
             variables.unshift({ name: match, position: new vscode.Position(lineNumber, line.lastIndexOf(match)) });
             line = line.substr(0, line.lastIndexOf(match));
@@ -48,9 +48,9 @@ export function findLocalVariableListBefore(
     return variables;
 
     function processeFunctionArgumentsList() {
-        let argumentsList = (line.match(/^function.*?\((.+?)\)/) || [null, null])[1];
+        const argumentsList = (line.match(/^function.*?\((.+?)\)/) || [null, null])[1];
         if (argumentsList) {
-            let argument = argumentsList.split(',').map(s => (s.match(/(\S*)\s*:\s*(\S*)/) || [s, s.trim(), undefined]) as [string, string, string | undefined]);
+            const argument = argumentsList.split(',').map(s => (s.match(/(\S*)\s*:\s*(\S*)/) || [s, s.trim(), undefined]) as [string, string, string | undefined]);
             for (const i of argument) {
                 variables.unshift({ name: i[1], type: i[2], position: new vscode.Position(lineNumber, line.indexOf(i[1])) });
             }
@@ -58,16 +58,16 @@ export function findLocalVariableListBefore(
     }
 
     function processeProbeValuesList() {
-        let probeName = (line.match(/^probe(?:\s+|\/\*.*?\*\/)([a-zA-Z._]+)/) || [null, null])[1];
+        const probeName = (line.match(/^probe(?:\s+|\/\*.*?\*\/)([a-zA-Z._]+)/) || [null, null])[1];
         if (probeName) {
             let rawDoc = ProbeRaw.filter(i => i.name === probeName);
             if (rawDoc[0]) {
-                let match = (rawDoc[0].doc.match(/\*\*Values\*\*\s*([\S\s]*)(?!\*\*)/) || [null, null])[1];
+                const match = (rawDoc[0].doc.match(/\*\*Values\*\*\s*([\S\s]*)(?!\*\*)/) || [null, null])[1];
                 if (match) {
-                    let values = match.split('\n');
+                    const values = match.split('\n');
                     for (let i of values) {
                         i = i.trim();
-                        let [, valueName, valueDoc] = (i.match(/^`(.*?)`(.*?)$/) || [undefined, undefined, undefined]);
+                        const [, valueName, valueDoc] = (i.match(/^`(.*?)`(.*?)$/) || [undefined, undefined, undefined]);
                         if (valueName) {
                             variables.unshift({ name: valueName, document: valueDoc, position: null });
                         }
@@ -77,9 +77,10 @@ export function findLocalVariableListBefore(
             rawDoc = syscallRaw.filter(i => 'syscall.' + i.name === probeName);
             rawDoc = [...rawDoc, ...vfsRaw.filter(i => 'vfs.' + i.name === probeName)];
             if (rawDoc.length) {
-                let values = rawDoc[0].doc.split(' ');
+                const values = rawDoc[0].doc.split(' ');
                 for (let i = 0; i < values.length; i++) {
                     values[i] = values[i].trim();
+                    // eslint-disable-next-line prefer-const
                     let [, valueName, valueType] = (values[i].match(/^(.*?):(.*?)$/) || [undefined, undefined, undefined]);
                     if (valueType === 'struct') {
                         i++;
@@ -97,7 +98,7 @@ export function findLocalVariableListBefore(
 export function findGlobalLabel(
     document: vscode.TextDocument,
 ): LabelInformation[] {
-    let globalLabels: LabelInformation[] = [];
+    const globalLabels: LabelInformation[] = [];
     const lineCount = document.lineCount;
     enum State { findKeyword, findSpace, findComma, findName, done };
     let state = State.findKeyword;
@@ -109,8 +110,8 @@ export function findGlobalLabel(
             line = document.lineAt(i).text;
         }
         if (state == State.findSpace) state = State.findName;
-        let match: (string | null)[] = line.match(/(function|global)(.*)$/) || [null, null, null];
-        let _keyword = match[1];
+        const match: (string | null)[] = line.match(/(function|global)(.*)$/) || [null, null, null];
+        const _keyword = match[1];
         if (state == State.findKeyword) line = match[2];
         if (_keyword !== null) {
             line = match[2];
@@ -140,8 +141,8 @@ export function findGlobalLabel(
             } else if (line === '') {
                 continue;
             } else {
-                let match: (string | null)[] = line.match(/^\s*([@a-zA-Z0-9_$]+)(.*)$/) || [null, null, null];
-                let name = match[1];
+                const match: (string | null)[] = line.match(/^\s*([@a-zA-Z0-9_$]+)(.*)$/) || [null, null, null];
+                const name = match[1];
                 line = match[2];
                 if (name !== null) {
                     globalLabels.push({

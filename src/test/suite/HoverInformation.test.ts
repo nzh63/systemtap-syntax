@@ -3,7 +3,7 @@ import * as assert from 'assert';
 import * as vscode from 'vscode';
 
 suite('Hover Information', () => {
-    let documentT = vscode.workspace.openTextDocument({
+    const documentT = vscode.workspace.openTextDocument({
         language: 'systemtap',
         content:
             `probe kprocess.exec { printtask("kprocess.exec") }
@@ -17,9 +17,9 @@ function printtask(name) {
     });
 
     async function check(position: vscode.Position, hasInfo: boolean = true) {
-        let document = await documentT;
+        const document = await documentT;
         await vscode.window.showTextDocument(document);
-        let infoList  = await vscode.commands.executeCommand(
+        const infoList  = await vscode.commands.executeCommand(
             'vscode.executeHoverProvider',
             document.uri,
             position) as vscode.Hover[];

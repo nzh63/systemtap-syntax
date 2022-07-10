@@ -3,7 +3,7 @@ import * as assert from 'assert';
 import * as vscode from 'vscode';
 
 suite('Goto Definition', () => {
-    let documentT = vscode.workspace.openTextDocument({
+    const documentT = vscode.workspace.openTextDocument({
         language: 'systemtap',
         content:
             `global DEAD=-1,
@@ -43,13 +43,13 @@ probe begin {
     });
 
     async function check(document: vscode.TextDocument, x: number, y: number, x0: number, y0: number) {
-        let pos: vscode.Location[] = await vscode.commands.executeCommand('vscode.executeDefinitionProvider', document.uri, new vscode.Position(x, y)) as vscode.Location[];
+        const pos: vscode.Location[] = await vscode.commands.executeCommand('vscode.executeDefinitionProvider', document.uri, new vscode.Position(x, y)) as vscode.Location[];
         assert.notEqual(undefined, pos[0]);
         assert.ok(pos.some(i => i.range.start.line == x0 && i.range.start.character == y0));
     }
 
     test('Ver name - global', async () => {
-        let document = await documentT;
+        const document = await documentT;
         await vscode.window.showTextDocument(document);
 
         await check(document, 9, 5, 0, 7);
@@ -62,7 +62,7 @@ probe begin {
     });
 
     test('Ver name - local', async () => {
-        let document = await documentT;
+        const document = await documentT;
         await vscode.window.showTextDocument(document);
 
         await check(document, 24, 10, 23, 4);
@@ -71,14 +71,14 @@ probe begin {
     });
 
     test('Function name', async () => {
-        let document = await documentT;
+        const document = await documentT;
         await vscode.window.showTextDocument(document);
 
         await check(document, 20, 14, 8, 9);
     });
 
     test('Function arguments', async () => {
-        let document = await documentT;
+        const document = await documentT;
         await vscode.window.showTextDocument(document);
 
         await check(document, 18, 5, 17, 13);
